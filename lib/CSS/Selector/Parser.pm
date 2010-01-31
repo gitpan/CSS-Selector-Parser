@@ -1,5 +1,5 @@
 package CSS::Selector::Parser;
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 # ABSTRACT: parse CSS selectors to Perl data structures
 
 use strict;
@@ -98,7 +98,7 @@ CSS::Selector::Parser - parse CSS selectors to Perl data structures
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 

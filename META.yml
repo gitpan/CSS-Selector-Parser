@@ -11,4 +11,5 @@ name: CSS-Selector-Parser
 requires:
   ExtUtils::MakeMaker: 6.11
   Sub::Exporter: 0
-version: 0.001
+  Test::More: 0.88
+version: 0.002

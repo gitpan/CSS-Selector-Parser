@@ -17,9 +17,10 @@ my %WriteMakefileArgs = (
                        'AUTHOR' => 'Hans Dieter Pearcey <hdp@cpan.org>',
                        'ABSTRACT' => 'parse CSS selectors to Perl data structures',
                        'EXE_FILES' => [],
-                       'VERSION' => '0.001',
+                       'VERSION' => '0.002',
                        'LICENSE' => 'perl',
                        'PREREQ_PM' => {
+                                        'Test::More' => '0.88',
                                         'ExtUtils::MakeMaker' => '6.11',
                                         'Sub::Exporter' => '0'
                                       }
