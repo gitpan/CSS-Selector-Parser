@@ -1,5 +1,7 @@
 package CSS::Selector::Parser;
-our $VERSION = '0.002';
+{
+  $CSS::Selector::Parser::VERSION = '0.003';
+}
 # ABSTRACT: parse CSS selectors to Perl data structures
 
 use strict;
@@ -19,6 +21,8 @@ my $re_comma      = qr/^\s*,/;
 
 sub parse_selector {
   local $_ = shift;
+  my %options = @_;
+
   my @rules;
   s/\s+$//;
   RULE: {
@@ -31,8 +35,11 @@ sub parse_selector {
       my ($element, $id, $class, %attr, %pseudo);
       $element = $1 if s/^($re_name|\*)//;
       SUB: {
-        $id    = $1, redo SUB if s/^\#($re_name)//;
-        $class = $1, redo SUB if s/^\.($re_name)//;
+        $id = $1, redo SUB if s/^\#($re_name)//;
+        if (s/^\.($re_name)//) {
+          $class = join '.', grep(defined, $class, $1);
+          redo SUB;
+        }
         if (s/$re_attr_value//) {
           $attr{$1}{$2} = $3;
           redo SUB;
@@ -51,6 +58,10 @@ sub parse_selector {
           }
           redo SUB;
         }
+      }
+
+      if ($options{class_as_array}) {
+        $class = defined $class ? [split /\.+/, $class] : [];
       }
 
       my $simple = {
@@ -98,7 +109,7 @@ CSS::Selector::Parser - parse CSS selectors to Perl data structures
 
 =head1 VERSION
 
-version 0.002
+version 0.003
 
 =head1 SYNOPSIS
 
@@ -121,9 +132,23 @@ ways to customize exporting.
 =head2 parse_selector
 
   my @rules = parse_selector($selector);
+  my @rules = parse_selector($selector, %options);
 
 CSS selectors are mapped to Perl data structures.  Each set of selectors is
 returned as an arrayref of hashrefs (see L</SYNOPSIS> for an example).
+
+Supported options:
+
+=over
+
+=item class_as_array
+
+If set, C<class> will always be an arrayref, even if no class was present in
+the selector (in which case it will be empty).
+
+See the description of C<class> below.
+
+=back
 
 The hashrefs have:
 
@@ -139,7 +164,11 @@ C<bar> in C<foo#bar.baz>.  Note: NOT C<[id="..."]>.
 
 =item class
 
-C<baz> in C<foo#bar.baz>.  Note: NOT C<[class="..."]>.
+C<baz.quux> in C<foo#bar.baz.quux> if C<class_as_array> option is not set.
+
+[C<baz>, C<quux>] in C<foo#bar.baz.quux> if C<class_as_array> option is set.
+
+Note: NOT C<[class="..."]>.
 
 =item attr
 
@@ -174,14 +203,14 @@ L<HTML::Selector::XPath>, from which I stole code
 
 =head1 AUTHOR
 
-  Hans Dieter Pearcey <hdp@cpan.org>
+Hans Dieter Pearcey <hdp@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Hans Dieter Pearcey <hdp@cpan.org>.
+This software is copyright (c) 2011 by Hans Dieter Pearcey <hdp@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
-the same terms as perl itself.
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 

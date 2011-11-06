@@ -2,14 +2,17 @@
 abstract: 'parse CSS selectors to Perl data structures'
 author:
   - 'Hans Dieter Pearcey <hdp@cpan.org>'
-generated_by: 'Dist::Zilla version 1.100160'
+build_requires: {}
+configure_requires:
+  ExtUtils::MakeMaker: 6.30
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.300000, CPAN::Meta::Converter version 2.110930001'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: CSS-Selector-Parser
 requires:
-  ExtUtils::MakeMaker: 6.11
   Sub::Exporter: 0
   Test::More: 0.88
-version: 0.002
+version: 0.003
